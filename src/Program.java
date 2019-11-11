@@ -60,35 +60,45 @@ public class Program {
         graphD2.connectedComponents();
         System.out.println("\n-------------------------\n");
 
+        System.out.println("\nEuler Path:");
+        System.out.println(graphUD2.eulerPath());
 
-        System.out.println("---Exercise2---");
-        System.out.println("---Exercise3---");
+        System.out.println("\n\n---Exercise3---");
 
 
-        MySocialNetwork x = new MySocialNetwork();
-        for(int i = 0;i<17;i++) x.addVertex(i);
-        x.addEdge(5,1);
-        x.addEdge(5,2);
-        x.addEdge(5,4);
-        x.addEdge(5,6);
-        x.addEdge(5,7);
-        x.addEdge(5,8);
-        x.addEdge(5,9);
-        x.addEdge(5,12);
-        x.addEdge(5,13);
-        x.addEdge(10,7);
-        x.addEdge(10,8);
-        x.addEdge(10,9);
-        x.addEdge(6,14);
-        x.addEdge(1,2);
-        x.addEdge(1,4);
-        x.addEdge(1,3);
-        x.addEdge(2,3);
-        x.addEdge(2,4);
-        x.addEdge(3,6);
-        x.addEdge(3,4);
-        x.addEdge(3,15);
-        System.out.println(x.possibleFriends(5));
+        MySocialNetwork socialNetwork = new MySocialNetwork();
+        for(int i = 1;i<16;i++) socialNetwork.addVertex(i);
+        socialNetwork.addEdge(5,1);
+        socialNetwork.addEdge(5,2);
+        socialNetwork.addEdge(5,4);
+        socialNetwork.addEdge(5,6);
+        socialNetwork.addEdge(5,7);
+        socialNetwork.addEdge(5,8);
+        socialNetwork.addEdge(5,9);
+        socialNetwork.addEdge(5,12);
+        socialNetwork.addEdge(5,15);
+        socialNetwork.addEdge(10,7);
+        socialNetwork.addEdge(7,11);
+        socialNetwork.addEdge(10,8);
+        socialNetwork.addEdge(10,9);
+        socialNetwork.addEdge(6,14);
+        socialNetwork.addEdge(1,2);
+        socialNetwork.addEdge(1,4);
+        socialNetwork.addEdge(1,3);
+        socialNetwork.addEdge(2,3);
+        socialNetwork.addEdge(2,4);
+        socialNetwork.addEdge(3,6);
+        socialNetwork.addEdge(3,4);
+        socialNetwork.addEdge(3,13);
+
+        System.out.println("NumberOfPeopleAtFriendshipDistance:");
+        System.out.println(socialNetwork.numberOfPeopleAtFriendshipDistance(5,2));
+
+        System.out.println("\nFurthestDistanceInFriendshipRelationships:");
+        System.out.println( socialNetwork.furthestDistanceInFriendshipRelationships(5));
+
+        System.out.println("\nPossibleFriends:");
+        System.out.println(socialNetwork.possibleFriends(5));
     }
 
 

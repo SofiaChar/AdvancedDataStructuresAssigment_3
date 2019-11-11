@@ -25,18 +25,18 @@ public class MyDirectedGraph implements A3Graph {
 
     @Override
     public void addEdge(int sourceVertex, int targetVertex) {
-        int source = 0;
+        int sourceIndex = 0;
         for (Node node : vertexList)
             if (node.value == sourceVertex)
-                source = vertexList.indexOf(node);
-        vertexList.get(source).nodeLinkedList.add(targetVertex);
+                sourceIndex = vertexList.indexOf(node);
+        vertexList.get(sourceIndex).nodeLinkedList.add(targetVertex);
     }
 
 
     private boolean hasCycle(int node, List<Integer> visited) {
         if (visited.contains(node)) return true;
         visited.add(node);
-        Iterable<Integer> adjLst = adjacency(node);
+        Iterable<Integer> adjLst = new AdjacencyList(vertexList.get(node).nodeLinkedList);
         for (Integer nextNode : adjLst ){
             for (Node x : vertexList)
                 if (x.value == nextNode)
@@ -57,19 +57,11 @@ public class MyDirectedGraph implements A3Graph {
     }
 
 
-    Iterable<Integer> adjacency(int v) {
-        return new AdjacencyList(vertexList.get(v).nodeLinkedList);
-    }
-
-    int getVertices() {
-        return vertexList.size();
-    }
-
     @Override
     public boolean isConnected() {
         Stack<Integer> stack = new Stack<>();
         ArrayList<Boolean> visited = setUnvisited();
-        for (int i = 0; i < getVertices(); i++)
+        for (int i = 0; i < vertexList.size(); i++)
             if (!visited.get(i))
                 DFSDirected(visited, i, stack);
         MyDirectedGraph graph = transpose();
@@ -90,7 +82,7 @@ public class MyDirectedGraph implements A3Graph {
     private void DFSDirected(ArrayList<Boolean> visited, int startPos, Stack<Integer> stack) {
         visited.set(startPos, true);
         if (stack == null) System.out.print(startPos + " ");
-        Iterable<Integer> adjLst = adjacency(startPos);
+        Iterable<Integer> adjLst = new AdjacencyList(vertexList.get(startPos).nodeLinkedList);
         for (Integer v : adjLst) {
             for (Node node : vertexList)
                 if (node.value == v)
@@ -104,8 +96,8 @@ public class MyDirectedGraph implements A3Graph {
     }
 
     private MyDirectedGraph transpose() {
-        MyDirectedGraph reverse = new MyDirectedGraph(getVertices());
-        for (int i = 0; i < getVertices(); i++)
+        MyDirectedGraph reverse = new MyDirectedGraph(vertexList.size());
+        for (int i = 0; i < vertexList.size(); i++)
             for (Integer u : vertexList.get(i).nodeLinkedList)
                 reverse.addEdge(u, i);
         return reverse;
@@ -115,7 +107,7 @@ public class MyDirectedGraph implements A3Graph {
     public List<List<Integer>> connectedComponents() {
         Stack<Integer> stack = new Stack<>();
         ArrayList<Boolean> visited = setUnvisited();
-        for (int i = 0; i < getVertices(); i++)
+        for (int i = 0; i < vertexList.size(); i++)
             if (!visited.get(i))
                 DFSDirected(visited, i, stack);
         MyDirectedGraph graph = transpose();
@@ -139,7 +131,7 @@ public class MyDirectedGraph implements A3Graph {
 
     private ArrayList<Boolean> setUnvisited() {
         ArrayList<Boolean> visited = new ArrayList<>();
-        for (int i = 0; i < getVertices(); ++i)
+        for (int i = 0; i < vertexList.size(); ++i)
             visited.add(false);
         return visited;
     }

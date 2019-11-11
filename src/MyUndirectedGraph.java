@@ -23,27 +23,23 @@ public class MyUndirectedGraph implements A3Graph {
 
     @Override
     public void addEdge(int sourceVertex, int targetVertex) {
-        int source = 0;
+        int sourceIndex = 0;
         for (Node node : vertexList)
             if (node.value == sourceVertex){
-                source = vertexList.indexOf(node);
+                sourceIndex = vertexList.indexOf(node);
                 break;
             }
-        vertexList.get(source).nodeLinkedList.add(targetVertex);
-        helperList.get(source).nodeLinkedList.add(targetVertex);
+        vertexList.get(sourceIndex).nodeLinkedList.add(targetVertex);
+        helperList.get(sourceIndex).nodeLinkedList.add(targetVertex);
 
         for (Node node : vertexList)
             if (node.value == targetVertex){
-                source = vertexList.indexOf(node);
+                sourceIndex = vertexList.indexOf(node);
                 break;
             }
-        vertexList.get(source).nodeLinkedList.add(sourceVertex);
-        helperList.get(source).nodeLinkedList.add(sourceVertex);
+        vertexList.get(sourceIndex).nodeLinkedList.add(sourceVertex);
+        helperList.get(sourceIndex).nodeLinkedList.add(sourceVertex);
 
-    }
-
-    Iterable<Integer> adjacentShallow(int x) {
-        return new AdjacencyList(helperList.get(x).nodeLinkedList);
     }
 
     @Override
@@ -52,7 +48,7 @@ public class MyUndirectedGraph implements A3Graph {
         int countConnComp = 1;
         for (int i = 0; i < vertexList.size(); i++)
             if (connectedComponents[i] == 0) {
-                ArrayList<Boolean> visited = runBFS(i);
+                ArrayList<Boolean> visited = runBFSUndirected(i);
                 for (int j = 0; j < vertexList.size(); j++)
                     if (visited.get(j))
                         connectedComponents[j] = countConnComp;
@@ -68,7 +64,7 @@ public class MyUndirectedGraph implements A3Graph {
         for (int i = 0; i < vertexList.size(); ++i)
             visited.add(false);
         for (int u = 0; u < vertexList.size(); u++)
-            if (!visited.get(u)) // Don't recur for u if already visited
+            if (!visited.get(u))
                 if (isCyclic(u, visited, -1))
                     return false;
         return true;
@@ -85,7 +81,8 @@ public class MyUndirectedGraph implements A3Graph {
                 }
             if (!visited.get(i)) {
                 if (isCyclic(i, visited, startVertex)) return true;
-            } else if (i != parent)
+            }
+            else if (i != parent)
                 return true;
         }
         return false;
@@ -93,41 +90,46 @@ public class MyUndirectedGraph implements A3Graph {
 
     @Override
     public List<List<Integer>> connectedComponents() {
-        List<List<Integer>> res = new ArrayList<>();
+        List<List<Integer>> result = new ArrayList<>();
         List<Integer> subGraph = new ArrayList<>();
         connectedComponents = new int[vertexList.size()];
-        int k = 1;
+        int count = 1;
         for (int i = 0; i < vertexList.size(); i++)
             if (connectedComponents[i] == 0) {
-                ArrayList<Boolean> visited = runBFS(i);
+                ArrayList<Boolean> visited = runBFSUndirected(i);
                 for (int j = 0; j < vertexList.size(); j++)
                     if (visited.get(j)) {
                         subGraph.add(vertexList.get(j).value);
-                        connectedComponents[j] = k;
+                        connectedComponents[j] = count;
                     }
                 List<Integer> f = new ArrayList<>();
-                f.addAll(subGraph);
-                res.add(f);
+                for (Integer x : subGraph){
+                    f.add(x);
+                    System.out.print(x);
+                }
+
+//                f.addAll(subGraph);
+                result.add(f);
+                System.out.println();
                 subGraph.clear();
-                k++;
+                count++;
             }
-        //System.out.println("list size : ? = " + res.size());
-        return res;
+        return result;
     }
 
     @Override
     public boolean hasEulerPath() {
-        int res = 1;
+        int result = 1;
         if (isConnected()) {
-            int odd = 0;
+            int count = 0;
             for (int i = 0; i < vertexList.size(); i++)
                 if ((vertexList.get(i).nodeLinkedList.size() % 2) != 0)
-                    odd++;
-            if (odd == 0) res = 2;
-            else if (odd == 2) res = 1;
-            else res = 0;
+                    count++;
+            if (count == 0) result = 2;
+            if (count == 2) result = 1;
+            else result = 0;
         }
-        return res == 1;
+        return result == 1;
     }
 
     ArrayList<Boolean> visitArray() {
@@ -137,15 +139,15 @@ public class MyUndirectedGraph implements A3Graph {
         return visited;
     }
 
-    private ArrayList<Boolean> runBFS(int startVertex) {
+    private ArrayList<Boolean> runBFSUndirected(int startVertex) {
         ArrayList<Boolean> visited = new ArrayList<>();
         for (int i = 0; i < vertexList.size(); ++i)
             visited.add(false);
-        bfs(visited, startVertex);
+        BFSUndirected(visited, startVertex);
         return visited;
     }
 
-    private void bfs(ArrayList<Boolean> visited, int startVertex) {
+    private void BFSUndirected(ArrayList<Boolean> visited, int startVertex) {
         Queue<Integer> queue = new LinkedList<>();
         queue.add(startVertex);
         visited.set(startVertex, true);
@@ -185,56 +187,63 @@ public class MyUndirectedGraph implements A3Graph {
                 eulerList.add(helperList.get(u).value);
                 break;
             }
-        pathWalker(u);
+        doEulerPath(u);
         return eulerList;
     }
 
-    private void pathWalker(int startVertex) {
-        Iterable<Integer> adjLst = adjacentShallow(startVertex);
-        for (Integer target : adjLst) {
+    private void doEulerPath(int startVertex) {
+        Iterable<Integer> adjLst = new AdjacencyList(helperList.get(startVertex).nodeLinkedList);
+        for (Integer next : adjLst) {
             for (Node node : helperList)
-                if (node.value == target){
-                    target = helperList.indexOf(node);
+                if (node.value == next){
+                    next = helperList.indexOf(node);
                     break;
                 }
-            if (isValidEdge(startVertex, target)) { // target is the position of the node in the shallow adj list
-                System.out.print(startVertex + "->" + target + "  ");
-                eulerList.add(helperList.get(target).value);
-                removeEdge(startVertex, target);
-                pathWalker(target);
+            if (checkEdge(startVertex, next)) {
+                System.out.print(startVertex + "--" + next + "  ");
+                eulerList.add(helperList.get(next).value);
+                deleteEdge(startVertex, next);
+                doEulerPath(next);
             }
         }
     }
 
-    private boolean isValidEdge(int u, int v) {
+    private boolean checkEdge(int u, int v) {
+
         if (helperList.get(u).nodeLinkedList.size() == 1)
             return true;
-        ArrayList<Boolean> visited = visitArray();
-        int count1 = dfsWalk(u, visited);
-        removeEdge(u, v);
-        visited = visitArray();
-        int count2 = dfsWalk(u, visited);
+
+        ArrayList<Boolean> visited = new ArrayList<>();
+        ArrayList<Boolean> tempVisited = new ArrayList<>();
+        for (int i = 0; i < vertexList.size(); i++) {
+            visited.add(false);
+            tempVisited.add(false);
+        }
+
+        int count1 = Undirected(u, visited);
+        deleteEdge(u, v);
+        int count2 = Undirected(u, tempVisited);
         addEdge(vertexList.get(u).value, vertexList.get(v).value);
         return count1 == count2;
     }
 
-    private int dfsWalk(int i, ArrayList<Boolean> visited) {
+    private int Undirected(int i, ArrayList<Boolean> visited) {
         visited.set(i, true);
         int count = 1;
-        Iterable<Integer> adjLst = adjacentShallow(i);
-        for (Integer target : adjLst) {
+        Iterable<Integer> adjLst = new AdjacencyList(helperList.get(i).nodeLinkedList);
+        for (Integer next : adjLst) {
             for (Node node : helperList)
-                if (node.value == target){
-                    target = helperList.indexOf(node);
+                if (node.value == next){
+                    next = helperList.indexOf(node);
                     break;
                 }
-            if (!visited.get(target))
-                count += dfsWalk(target, visited);
+            if (!visited.get(next))
+                count += Undirected(next, visited);
         }
         return count;
     }
 
-    private void removeEdge(int sourceVertex, int targetVertex) {
+    private void deleteEdge(int sourceVertex, int targetVertex) {
         helperList.get(sourceVertex).nodeLinkedList.remove(helperList.get(sourceVertex).nodeLinkedList.indexOf(helperList.get(targetVertex).value));
         helperList.get(targetVertex).nodeLinkedList.remove(helperList.get(targetVertex).nodeLinkedList.indexOf(helperList.get(sourceVertex).value));
     }

@@ -1,16 +1,16 @@
 import java.util.List;
 
-public interface A3SocialNetwork<T> {
+public interface A3SocialNetwork {
 
-    public int numberOfPeopleAtFriendshipDistance(T vertex, int distance);
+    public int numberOfPeopleAtFriendshipDistance(int vertexIndex, int distance);
 
-    public int furthestDistanceInFriendshipRelationships(T vertex);
+    public int furthestDistanceInFriendshipRelationships(int vertexIndex);
 
-    public List<T> possibleFriends(T vertex);
+    public List<Integer> possibleFriends(int vertexIndex);
 
-    default public List<T> probableFriends(T vertex) {
-	System.out.println("probableFriends NOT implemented");
-	return null;
+    default public List<Integer> probableFriends(int vertexIndex) {
+        System.out.println("Not implemented");
+        return null;
     }
 
 }

@@ -1,24 +1,21 @@
 import java.util.List;
 
-public interface A3Graph<T> {
-	
-	public void addVertex(T vertex);
-	public void addEdge(T sourceVertex, T targetVertex);
-	
-	
+public interface A3Graph {
+
+	public void addVertex(int vertex);
+
+	public void addEdge(int sourceVertex, int targetVertex);
+
+
 	public boolean isConnected();
-	public boolean isAcyclic();	
-	
-	public List<List<T>> connectedComponents();
-	
-	default public boolean hasEulerPath() {
-	    System.out.println("Not implemented");
-	    return false;
-	}
-	
-	default public List<T> eulerPath(){
-	    System.out.println("Not implemented");
-	    return null;
-	}
-	
+
+	public boolean isAcyclic();
+
+	public List<List<Integer>> connectedComponents();
+
+	public boolean hasEulerPath() ;
+
+	public List<Integer> eulerPath();
+
 }
+

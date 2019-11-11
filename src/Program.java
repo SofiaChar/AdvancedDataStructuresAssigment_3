@@ -3,6 +3,27 @@ public class Program {
     public static void main(String[] args) {
         System.out.println("---Exercise 1---\n");
 
+        MyUndirectedGraph g = new MyUndirectedGraph();
+        g.addVertex(0);
+        g.addVertex(1);
+        g.addVertex(2);
+        g.addVertex(3);
+        g.addVertex(4);
+        g.addVertex(5);
+        g.addVertex(6);
+        g.addEdge(0, 1);
+        g.addEdge(1, 2);
+        g.addEdge(2, 3);
+        g.addEdge(2, 4);
+        g.addEdge(3, 4);
+        g.addEdge(3, 5);
+        g.addEdge(5, 6);
+        g.addEdge(6, 0);
+        System.out.println("GRAPH 1");
+        g.print();
+
+
+
         //testing
         MyDirectedGraph graphCheck = new MyDirectedGraph(5);
         graphCheck.addEdge(0, 1);

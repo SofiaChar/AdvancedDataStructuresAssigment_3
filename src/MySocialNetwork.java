@@ -44,7 +44,7 @@ public class MySocialNetwork extends MyUndirectedGraph implements A3SocialNetwor
     private void setupPlay(int vertexIndex) {
         visited = visitArray();
         levelVertices.clear();
-        for (int i = 0; i < getVertices(); i++) levelVertices.add(1);
+        for (int i = 0; i < vertexList.size(); i++) levelVertices.add(1);
         bfsModified(vertexIndex, levelVertices, visited);
         System.out.println("\nDisplays level of units ==> " + levelVertices.toString() + "\n");
     }
@@ -61,7 +61,7 @@ public class MySocialNetwork extends MyUndirectedGraph implements A3SocialNetwor
         visited.set(vertex, true);
         while (queue.size() > 0) {
             int u = queue.remove();
-            Iterable<Integer> iterable = adj(u);
+            Iterable<Integer> iterable = new AdjacencyList(vertexList.get(u).getNodeLinkedList());
             for (Integer v : iterable) {
                 for (Node node : vertexList)
                     if (node.getVal() == v) {

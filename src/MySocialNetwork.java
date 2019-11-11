@@ -15,32 +15,32 @@ public class MySocialNetwork extends MyUndirectedGraph implements A3SocialNetwor
     MySocialNetwork(int v) {
         super(v);
     }
-    public static void main(String[] arg){
-        MySocialNetwork x = new MySocialNetwork();
-        for(int i = 0;i<17;i++) x.addVertex(i);
-        x.addEdge(5,1);
-        x.addEdge(5,2);
-        x.addEdge(5,4);
-        x.addEdge(5,6);
-        x.addEdge(5,7);
-        x.addEdge(5,8);
-        x.addEdge(5,9);
-        x.addEdge(5,12);
-        x.addEdge(5,13);
-        x.addEdge(10,7);
-        x.addEdge(10,8);
-        x.addEdge(10,9);
-        x.addEdge(6,14);
-        x.addEdge(1,2);
-        x.addEdge(1,4);
-        x.addEdge(1,3);
-        x.addEdge(2,3);
-        x.addEdge(2,4);
-        x.addEdge(3,6);
-        x.addEdge(3,4);
-        x.addEdge(3,15);
-        System.out.println(x.possibleFriends(5));
-    }
+//    public static void main(String[] arg){
+//        MySocialNetwork x = new MySocialNetwork();
+//        for(int i = 0;i<17;i++) x.addVertex(i);
+//        x.addEdge(5,1);
+//        x.addEdge(5,2);
+//        x.addEdge(5,4);
+//        x.addEdge(5,6);
+//        x.addEdge(5,7);
+//        x.addEdge(5,8);
+//        x.addEdge(5,9);
+//        x.addEdge(5,12);
+//        x.addEdge(5,13);
+//        x.addEdge(10,7);
+//        x.addEdge(10,8);
+//        x.addEdge(10,9);
+//        x.addEdge(6,14);
+//        x.addEdge(1,2);
+//        x.addEdge(1,4);
+//        x.addEdge(1,3);
+//        x.addEdge(2,3);
+//        x.addEdge(2,4);
+//        x.addEdge(3,6);
+//        x.addEdge(3,4);
+//        x.addEdge(3,15);
+//        System.out.println(x.possibleFriends(5));
+//    }
     private void setupPlay(int vertexIndex) {
         visited = visitArray();
         levelVertices.clear();

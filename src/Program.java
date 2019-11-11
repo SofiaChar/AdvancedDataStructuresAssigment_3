@@ -3,110 +3,93 @@ public class Program {
     public static void main(String[] args) {
         System.out.println("---Exercise 1---\n");
 
-        MyUndirectedGraph g = new MyUndirectedGraph();
-        g.addVertex(0);
-        g.addVertex(1);
-        g.addVertex(2);
-        g.addVertex(3);
-        g.addVertex(4);
-        g.addVertex(5);
-        g.addVertex(6);
-        g.addEdge(0, 1);
-        g.addEdge(1, 2);
-        g.addEdge(2, 3);
-        g.addEdge(2, 4);
-        g.addEdge(3, 4);
-        g.addEdge(3, 5);
-        g.addEdge(5, 6);
-        g.addEdge(6, 0);
-        System.out.println("GRAPH 1");
-        g.print();
-
-
-
         //testing
-        MyDirectedGraph graphCheck = new MyDirectedGraph(5);
-        graphCheck.addEdge(0, 1);
-        graphCheck.addEdge(1, 2);
-        graphCheck.addEdge(2, 3);
-        graphCheck.addEdge(3, 0);
-        graphCheck.addEdge(2, 4);
-        graphCheck.addEdge(4, 2);
+        MyDirectedGraph graphD2 = new MyDirectedGraph(5);
+        graphD2.addEdge(0, 3);
+        graphD2.addEdge(0, 2);
+        graphD2.addEdge(2, 1);
+        graphD2.addEdge(1, 0);
+        graphD2.addEdge(3, 4);
 
-        if(graphCheck.isAcyclic()){
-            System.out.println("Acyclic!");
-        }
-        else{
-            System.out.println("Not Acyclic");
-        }
+        MyUndirectedGraph graphUD2 = new MyUndirectedGraph();
+        graphUD2.addVertex(0);
+        graphUD2.addVertex(1);
+        graphUD2.addVertex(2);
+        graphUD2.addVertex(3);
+//        graphD2.addVertex(4);
+//        graphD2.addVertex(5);
+//        graphD2.addVertex(6);
+        graphUD2.addEdge(0, 1);
+        graphUD2.addEdge(0, 2);
+        graphUD2.addEdge(1, 2);
+//        graphD2.addEdge(2, 4);
+//        graphD2.addEdge(3, 4);
+//        graphD2.addEdge(3, 5);
+//        graphD2.addEdge(5, 6);
+//        graphD2.addEdge(6, 0);
 
-        if(graphCheck.isConnected()){
-            System.out.println("Is connected.");
-        }
-        else{
-            System.out.println("Is not connected.");
-        }
-        System.out.println("\nConnected components:");
-        graphCheck.connectedComponents();
-        System.out.println("-------------------------");
 
-        MyDirectedGraph graph1 = new MyDirectedGraph(5);
-        graph1.addEdge(0, 3);
-        graph1.addEdge(0, 2);
-        graph1.addEdge(2, 1);
-        graph1.addEdge(1, 0);
-        graph1.addEdge(3, 4);
-        // graph1.addEdge(4, 2);
-        if(graph1.isAcyclic()){
-            System.out.println("Acyclic!");
-        }
-        else{
-            System.out.println("Not Acyclic");
+        if (graphUD2.isAcyclic()) {
+            System.out.println("Undirected graph. Acyclic!");
+        } else {
+            System.out.println("Undirected graph. Not Acyclic");
         }
 
-        if(graph1.isConnected()){
-            System.out.println("Is connected.");
-        }
-        else{
-            System.out.println("Is not connected.");
-        }
-        System.out.println("\nConnected components:");
-        graph1.connectedComponents();
-        System.out.println("-------------------------");
-
-        MyDirectedGraph graph2 = new MyDirectedGraph();
-        graph2.addVertex(0);
-        graph2.addVertex(2);
-        graph2.addVertex(1);
-        graph2.addVertex(3);
-        graph2.addEdge(0, 1);
-        graph2.addEdge(1,2);
-        graph2.addEdge(2,3);
-        if(graph2.isAcyclic()){
-            System.out.println("Acyclic!");
-        }
-        else{
-            System.out.println("Not Acyclic");
+        if (graphD2.isAcyclic()) {
+            System.out.println("Directed graph. Acyclic!");
+        } else {
+            System.out.println("Directed graph. Not Acyclic");
         }
 
-        if(graph2.isConnected()){
-            System.out.println("Is connected.");
+        if (graphUD2.isConnected()) {
+            System.out.println("Undirected graph. Is connected.");
+        } else {
+            System.out.println("Undirected graph. Is not connected.");
         }
-        else{
-            System.out.println("Is not connected.");
+
+        if (graphD2.isConnected()) {
+            System.out.println("Directed graph. Is connected.");
+        } else {
+            System.out.println("Directed graph. Is not connected.");
         }
-        System.out.println("\nConnected components:");
-        graph2.connectedComponents();
+
+        System.out.println("\nConnected components for undirected graph:");
+        graphUD2.connectedComponents();
+
+        System.out.println("\nConnected components for directed graph:");
+        graphD2.connectedComponents();
+        System.out.println("\n-------------------------\n");
 
 
         System.out.println("---Exercise2---");
         System.out.println("---Exercise3---");
 
 
-
-
+        MySocialNetwork x = new MySocialNetwork();
+        for(int i = 0;i<17;i++) x.addVertex(i);
+        x.addEdge(5,1);
+        x.addEdge(5,2);
+        x.addEdge(5,4);
+        x.addEdge(5,6);
+        x.addEdge(5,7);
+        x.addEdge(5,8);
+        x.addEdge(5,9);
+        x.addEdge(5,12);
+        x.addEdge(5,13);
+        x.addEdge(10,7);
+        x.addEdge(10,8);
+        x.addEdge(10,9);
+        x.addEdge(6,14);
+        x.addEdge(1,2);
+        x.addEdge(1,4);
+        x.addEdge(1,3);
+        x.addEdge(2,3);
+        x.addEdge(2,4);
+        x.addEdge(3,6);
+        x.addEdge(3,4);
+        x.addEdge(3,15);
+        System.out.println(x.possibleFriends(5));
+    }
 
 
     }
-
-}

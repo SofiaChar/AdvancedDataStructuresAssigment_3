@@ -105,7 +105,7 @@ public class MyUndirectedGraph implements A3Graph {
                 List<Integer> f = new ArrayList<>();
                 for (Integer x : subGraph){
                     f.add(x);
-                    System.out.print(x);
+                    System.out.print(x + " ");
                 }
 
 //                f.addAll(subGraph);

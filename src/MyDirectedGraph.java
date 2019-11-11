@@ -27,9 +27,9 @@ public class MyDirectedGraph implements A3Graph {
     public void addEdge(int sourceVertex, int targetVertex) {
         int source = 0;
         for (Node node : vertexList)
-            if (node.getVal() == sourceVertex)
+            if (node.value == sourceVertex)
                 source = vertexList.indexOf(node);
-        vertexList.get(source).getNodeLinkedList().add(targetVertex);
+        vertexList.get(source).nodeLinkedList.add(targetVertex);
     }
 
 
@@ -39,7 +39,7 @@ public class MyDirectedGraph implements A3Graph {
         Iterable<Integer> adjLst = adjacency(node);
         for (Integer nextNode : adjLst ){
             for (Node x : vertexList)
-                if (x.getVal() == nextNode)
+                if (x.value == nextNode)
                     nextNode = vertexList.indexOf(x);
             if (hasCycle(nextNode, visited)) return true;
         }
@@ -58,7 +58,7 @@ public class MyDirectedGraph implements A3Graph {
 
 
     Iterable<Integer> adjacency(int v) {
-        return new AdjacencyList(vertexList.get(v).getNodeLinkedList());
+        return new AdjacencyList(vertexList.get(v).nodeLinkedList);
     }
 
     int getVertices() {
@@ -93,7 +93,7 @@ public class MyDirectedGraph implements A3Graph {
         Iterable<Integer> adjLst = adjacency(startPos);
         for (Integer v : adjLst) {
             for (Node node : vertexList)
-                if (node.getVal() == v)
+                if (node.value == v)
                     v = vertexList.indexOf(node);
             if (!visited.get(v)) {
                 visited.set(v, true);
@@ -106,7 +106,7 @@ public class MyDirectedGraph implements A3Graph {
     private MyDirectedGraph transpose() {
         MyDirectedGraph reverse = new MyDirectedGraph(getVertices());
         for (int i = 0; i < getVertices(); i++)
-            for (Integer u : vertexList.get(i).getNodeLinkedList())
+            for (Integer u : vertexList.get(i).nodeLinkedList)
                 reverse.addEdge(u, i);
         return reverse;
     }
@@ -124,7 +124,7 @@ public class MyDirectedGraph implements A3Graph {
             int v = stack.pop();
             if (!visited.get(v)) {
                 graph.DFSDirected(visited, v, null);
-                subGraph.add(vertexList.get(v).getVal());
+                subGraph.add(vertexList.get(v).value);
                 List<Integer> f = new ArrayList<>();
                 for (Integer x : subGraph)
                     f.add(x);

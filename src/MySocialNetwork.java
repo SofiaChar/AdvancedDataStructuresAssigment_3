@@ -52,7 +52,7 @@ public class MySocialNetwork extends MyUndirectedGraph implements A3SocialNetwor
     private void bfsModified(int vertex, ArrayList<Integer> levels, ArrayList<Boolean> visited) {
         Queue<Integer> queue = new LinkedList<>();
         for (Node node : vertexList)
-            if (node.getVal() == vertex) {
+            if (node.value == vertex) {
                 vertex = vertexList.indexOf(node);
                 break;
             }
@@ -61,10 +61,10 @@ public class MySocialNetwork extends MyUndirectedGraph implements A3SocialNetwor
         visited.set(vertex, true);
         while (queue.size() > 0) {
             int u = queue.remove();
-            Iterable<Integer> iterable = new AdjacencyList(vertexList.get(u).getNodeLinkedList());
+            Iterable<Integer> iterable = new AdjacencyList(vertexList.get(u).nodeLinkedList);
             for (Integer v : iterable) {
                 for (Node node : vertexList)
-                    if (node.getVal() == v) {
+                    if (node.value == v) {
                         v = vertexList.indexOf(node);
                         break;
                     }
@@ -102,22 +102,22 @@ public class MySocialNetwork extends MyUndirectedGraph implements A3SocialNetwor
     public List<Integer> possibleFriends(int vertexIndex) {
         setupPlay(vertexIndex);
         for (Node node : vertexList)
-            if (node.getVal() == vertexIndex) {
+            if (node.value == vertexIndex) {
                 vertexIndex = vertexList.indexOf(node);
                 break;
             }
-        List<Integer> vertexEdges = vertexList.get(vertexIndex).getNodeLinkedList();
+        List<Integer> vertexEdges = vertexList.get(vertexIndex).nodeLinkedList;
         ArrayList<Integer> result = new ArrayList<>();
         for (int i = 0; i < levelVertices.size(); i++) {
             if (levelVertices.get(i) == 2) {
-                List<Integer> edges = vertexList.get(i).getNodeLinkedList();
+                List<Integer> edges = vertexList.get(i).nodeLinkedList;
                 if (edges.size() >= 3) {
                     int third = 0;
                     for (Integer edge : edges)
                         if (vertexEdges.indexOf(edge) != -1)
                             third++;
                     if (third >= 3)
-                        result.add(vertexList.get(i).getVal());
+                        result.add(vertexList.get(i).value);
                 }
             }
         }

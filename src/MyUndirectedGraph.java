@@ -245,7 +245,7 @@ public class MyUndirectedGraph implements A3Graph {
                     target = shallow.indexOf(node);
                     break;
                 }
-            if (isValidEdge(startVertex, target)) { // target is the position of the node in the shallow adj list
+            if (isValidEdge(startVertex, target)) { // target is the position of the node in the shallow adjacency list
                 System.out.print(startVertex + "->" + target + "  ");
                 eulerList.add(shallow.get(target).getVal());
                 removeEdge(startVertex, target);

@@ -25,11 +25,9 @@ public class MyDirectedGraph implements A3Graph {
     private List<List<Integer>> connectedComponents = new ArrayList<>();
     private List<Integer> subGraph = new ArrayList<>();
 
-    MyDirectedGraph() {
-    }
-
-    MyDirectedGraph(int v) {
-        for (int i = 0; i < v; i++) addVertex(i);
+    MyDirectedGraph(int vertex) {
+        for (int i = 0; i < vertex; i++)
+            addVertex(i);
     }
 
     @Override

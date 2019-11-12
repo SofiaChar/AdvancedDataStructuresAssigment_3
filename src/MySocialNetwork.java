@@ -41,15 +41,15 @@ public class MySocialNetwork extends MyUndirectedGraph implements A3SocialNetwor
 //        x.addEdge(3,15);
 //        System.out.println(x.possibleFriends(5));
 //    }
-    private void setupPlay(int vertexIndex) {
+    private void distanceOf(int vertexIndex) {
         visited = visitArray();
         levelVertices.clear();
         for (int i = 0; i < vertexList.size(); i++) levelVertices.add(1);
-        bfsModified(vertexIndex, levelVertices, visited);
-        System.out.println("\nDisplays level of units ==> " + levelVertices.toString() + "\n");
+        BFSModified(vertexIndex, levelVertices, visited);
+        System.out.println("\nDistance of vertex index " + vertexIndex + " = " + levelVertices.toString() + "\n");
     }
 
-    private void bfsModified(int vertex, ArrayList<Integer> levels, ArrayList<Boolean> visited) {
+    private void BFSModified(int vertex, ArrayList<Integer> levels, ArrayList<Boolean> visited) {
         Queue<Integer> queue = new LinkedList<>();
         for (Node node : vertexList)
             if (node.value == vertex) {
@@ -80,7 +80,7 @@ public class MySocialNetwork extends MyUndirectedGraph implements A3SocialNetwor
 
     @Override
     public int numberOfPeopleAtFriendshipDistance(int vertexIndex, int distance) {
-        setupPlay(vertexIndex);
+        distanceOf(vertexIndex);
         int count = 0;
         for (int i : levelVertices)
             if (i == distance)
@@ -90,7 +90,7 @@ public class MySocialNetwork extends MyUndirectedGraph implements A3SocialNetwor
 
     @Override
     public int furthestDistanceInFriendshipRelationships(int vertexIndex) {
-        setupPlay(vertexIndex);
+        distanceOf(vertexIndex);
         int count = 0;
         for (int i : levelVertices)
             if (i > count)
@@ -100,7 +100,7 @@ public class MySocialNetwork extends MyUndirectedGraph implements A3SocialNetwor
 
     @Override
     public List<Integer> possibleFriends(int vertexIndex) {
-        setupPlay(vertexIndex);
+        distanceOf(vertexIndex);
         for (Node node : vertexList)
             if (node.value == vertexIndex) {
                 vertexIndex = vertexList.indexOf(node);

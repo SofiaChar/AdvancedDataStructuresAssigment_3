@@ -99,6 +99,19 @@ public class Program {
 
         System.out.println("\nPossibleFriends:");
         System.out.println(socialNetwork.possibleFriends(5));
+
+        //testing another vertex index
+        System.out.println("-------------------");
+        System.out.println("NumberOfPeopleAtFriendshipDistance:");
+        System.out.println(socialNetwork.numberOfPeopleAtFriendshipDistance(13,2));
+
+        System.out.println("\nFurthestDistanceInFriendshipRelationships:");
+        System.out.println( socialNetwork.furthestDistanceInFriendshipRelationships(13));
+
+        System.out.println("\nPossibleFriends:");
+        System.out.println(socialNetwork.possibleFriends(13));
+
+
     }
 
 

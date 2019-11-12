@@ -152,10 +152,10 @@ public class MyUndirectedGraph implements A3Graph {
         return marked;
     }
 
-    private void BFSUndirected(ArrayList<Boolean> visited, int startVertex) {
+    private void BFSUndirected(ArrayList<Boolean> marked, int startVertex) {
         Queue<Integer> queue = new LinkedList<>();
         queue.add(startVertex);
-        visited.set(startVertex, true);
+        marked.set(startVertex, true);
         while (queue.size() > 0) {
             int u = queue.remove();
             Iterable<Integer> iterable = new AdjacencyList(vertexList.get(u).nodeLinkedList);
@@ -165,8 +165,8 @@ public class MyUndirectedGraph implements A3Graph {
                         v = vertexList.indexOf(node);
                         break;
                     }
-                if (!visited.get(v)) {
-                    visited.set(v, true);
+                if (!marked.get(v)) {
+                    marked.set(v, true);
                     queue.add(v);
                 }
             }

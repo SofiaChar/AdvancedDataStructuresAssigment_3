@@ -5,37 +5,42 @@ import java.util.Queue;
 
 public class MySocialNetwork extends MyUndirectedGraph implements A3SocialNetwork {
 
-    private ArrayList<Boolean> visited;
-    private ArrayList<Integer> levelVertices = new ArrayList<>();
-
-    MySocialNetwork() {
-
-        super();
-    }
+    private ArrayList<Boolean> marked;
+    private ArrayList<Integer> distanceBetweenVertices = new ArrayList<>();
 
     MySocialNetwork(int v) {
 
         super(v);
     }
 
-    private void distanceOf(int vertexIndex) {
-        visited = marked();
-        levelVertices.clear();
-        for (int i = 0; i < vertexList.size(); i++) levelVertices.add(1);
-        BFSModified(vertexIndex, levelVertices, visited);
-        System.out.println("\nDistance of vertex index " + vertexIndex + " = " + levelVertices.toString() + "\n");
+    MySocialNetwork() {
+
+        super();
     }
 
-    private void BFSModified(int vertex, ArrayList<Integer> levels, ArrayList<Boolean> marked) {
+
+    private void distanceOf(int vertexIndex) {
+        marked = marked();
+        distanceBetweenVertices.clear();
+        for (int i = 0; i < vertexList.size(); i++)
+            distanceBetweenVertices.add(1);
+        BFSSocialN(vertexIndex, distanceBetweenVertices, marked);
+
+        System.out.println("\nDistance of vertex index " + vertexIndex + " = " + distanceBetweenVertices.toString() + "\n");
+    }
+
+    private void BFSSocialN(int vertex, ArrayList<Integer> distances, ArrayList<Boolean> marked) {
         Queue<Integer> queue = new LinkedList<>();
         for (Node node : vertexList)
             if (node.value == vertex) {
                 vertex = vertexList.indexOf(node);
                 break;
             }
+
         queue.add(vertex);
-        levels.set(vertex, 0);
+        distances.set(vertex, 0);
         marked.set(vertex, true);
+
         while (queue.size() > 0) {
             int u = queue.remove();
             Iterable<Integer> iterable = new AdjacencyList(vertexList.get(u).nodeLinkedList);
@@ -48,7 +53,7 @@ public class MySocialNetwork extends MyUndirectedGraph implements A3SocialNetwor
                 if (!marked.get(v)) {
                     queue.add(v);
                     marked.set(v, true);
-                    levels.set(v, levels.get(u) + 1);
+                    distances.set(v, distances.get(u) + 1);
                 }
             }
 
@@ -58,42 +63,43 @@ public class MySocialNetwork extends MyUndirectedGraph implements A3SocialNetwor
     @Override
     public int numberOfPeopleAtFriendshipDistance(int vertexIndex, int distance) {
         distanceOf(vertexIndex);
-        int count = 0;
-        for (int i : levelVertices)
+        int number = 0;
+        for (int i : distanceBetweenVertices)
             if (i == distance)
-                count++;
-        return count;
+                number++;
+        return number;
     }
 
     @Override
     public int furthestDistanceInFriendshipRelationships(int vertexIndex) {
-        distanceOf(vertexIndex);
-        int count = 0;
-        for (int i : levelVertices)
-            if (i > count)
-                count = i;
-        return count;
+
+        int number = 0;
+        for (int i : distanceBetweenVertices)
+            if (i > number)
+                number = i;
+        return number;
     }
 
     @Override
     public List<Integer> possibleFriends(int vertexIndex) {
-        distanceOf(vertexIndex);
+
         for (Node node : vertexList)
             if (node.value == vertexIndex) {
                 vertexIndex = vertexList.indexOf(node);
                 break;
             }
+
         List<Integer> vertexEdges = vertexList.get(vertexIndex).nodeLinkedList;
         ArrayList<Integer> consequence = new ArrayList<>();
-        for (int i = 0; i < levelVertices.size(); i++) {
-            if (levelVertices.get(i) == 2) {
+        for (int i = 0; i < distanceBetweenVertices.size(); i++) {
+            if (distanceBetweenVertices.get(i) == 2) {
                 List<Integer> edges = vertexList.get(i).nodeLinkedList;
                 if (edges.size() >= 3) {
-                    int third = 0;
+                    int commonFriends = 0;
                     for (Integer edge : edges)
                         if (vertexEdges.indexOf(edge) != -1)
-                            third++;
-                    if (third >= 3)
+                            commonFriends++;
+                    if (commonFriends >= 3)
                         consequence.add(vertexList.get(i).value);
                 }
             }

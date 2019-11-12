@@ -33,25 +33,25 @@ public class MyDirectedGraph implements A3Graph {
     }
 
 
-    private boolean checkIfHasCycle(int node, List<Integer> visited) {
-        if (visited.contains(node)) return true;
-        visited.add(node);
+    private boolean checkIfHasCycle(int node, List<Integer> marked) {
+        if (marked.contains(node)) return true;
+        marked.add(node);
         Iterable<Integer> adjLst = new AdjacencyList(vertexList.get(node).nodeLinkedList);
         for (Integer nextNode : adjLst ){
             for (Node x : vertexList)
                 if (x.value == nextNode)
                     nextNode = vertexList.indexOf(x);
-            if (checkIfHasCycle(nextNode, visited)) return true;
+            if (checkIfHasCycle(nextNode, marked)) return true;
         }
-        visited.remove(visited.size() - 1);
+        marked.remove(marked.size() - 1);
         return false;
     }
 
     @Override
     public boolean isAcyclic() {
-        List<Integer> visited = new ArrayList<>();
+        List<Integer> marked = new ArrayList<>();
         for (int i = 0; i < vertexList.size(); i++)
-            if (checkIfHasCycle(i, visited))
+            if (checkIfHasCycle(i, marked))
                 return false;
         return true;
     }

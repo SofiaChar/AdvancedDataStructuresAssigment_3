@@ -33,7 +33,7 @@ public class MyDirectedGraph implements A3Graph {
     }
 
 
-    private boolean hasCycle(int node, List<Integer> visited) {
+    private boolean checkIfHasCycle(int node, List<Integer> visited) {
         if (visited.contains(node)) return true;
         visited.add(node);
         Iterable<Integer> adjLst = new AdjacencyList(vertexList.get(node).nodeLinkedList);
@@ -41,7 +41,7 @@ public class MyDirectedGraph implements A3Graph {
             for (Node x : vertexList)
                 if (x.value == nextNode)
                     nextNode = vertexList.indexOf(x);
-            if (hasCycle(nextNode, visited)) return true;
+            if (checkIfHasCycle(nextNode, visited)) return true;
         }
         visited.remove(visited.size() - 1);
         return false;
@@ -51,7 +51,7 @@ public class MyDirectedGraph implements A3Graph {
     public boolean isAcyclic() {
         List<Integer> visited = new ArrayList<>();
         for (int i = 0; i < vertexList.size(); i++)
-            if (hasCycle(i, visited))
+            if (checkIfHasCycle(i, visited))
                 return false;
         return true;
     }
@@ -60,12 +60,12 @@ public class MyDirectedGraph implements A3Graph {
     @Override
     public boolean isConnected() {
         Stack<Integer> stack = new Stack<>();
-        ArrayList<Boolean> visited = setUnvisited();
+        ArrayList<Boolean> visited = marked();
         for (int i = 0; i < vertexList.size(); i++)
             if (!visited.get(i))
                 DFSDirected(visited, i, stack);
         MyDirectedGraph graph = transpose();
-        visited = setUnvisited();
+        visited = marked();
         int count = 0;
         while (!stack.isEmpty()) {
             int v = stack.pop();
@@ -79,17 +79,17 @@ public class MyDirectedGraph implements A3Graph {
         return count == 1;
     }
 
-    private void DFSDirected(ArrayList<Boolean> visited, int startPos, Stack<Integer> stack) {
-        visited.set(startPos, true);
+    private void DFSDirected(ArrayList<Boolean> marked, int startPos, Stack<Integer> stack) {
+        marked.set(startPos, true);
         if (stack == null) System.out.print(startPos + " ");
         Iterable<Integer> adjLst = new AdjacencyList(vertexList.get(startPos).nodeLinkedList);
         for (Integer v : adjLst) {
             for (Node node : vertexList)
                 if (node.value == v)
                     v = vertexList.indexOf(node);
-            if (!visited.get(v)) {
-                visited.set(v, true);
-                DFSDirected(visited, v, stack);
+            if (!marked.get(v)) {
+                marked.set(v, true);
+                DFSDirected(marked, v, stack);
             }
         }
         if (stack != null) stack.push(startPos);
@@ -106,16 +106,16 @@ public class MyDirectedGraph implements A3Graph {
     @Override
     public List<List<Integer>> connectedComponents() {
         Stack<Integer> stack = new Stack<>();
-        ArrayList<Boolean> visited = setUnvisited();
+        ArrayList<Boolean> marked = marked();
         for (int i = 0; i < vertexList.size(); i++)
-            if (!visited.get(i))
-                DFSDirected(visited, i, stack);
+            if (!marked.get(i))
+                DFSDirected(marked, i, stack);
         MyDirectedGraph graph = transpose();
-        visited = setUnvisited();
+        marked = marked();
         while (!stack.isEmpty()) {
             int v = stack.pop();
-            if (!visited.get(v)) {
-                graph.DFSDirected(visited, v, null);
+            if (!marked.get(v)) {
+                graph.DFSDirected(marked, v, null);
                 subGraph.add(vertexList.get(v).value);
                 List<Integer> f = new ArrayList<>();
                 for (Integer x : subGraph)
@@ -129,11 +129,11 @@ public class MyDirectedGraph implements A3Graph {
 
     }
 
-    private ArrayList<Boolean> setUnvisited() {
-        ArrayList<Boolean> visited = new ArrayList<>();
+    private ArrayList<Boolean> marked() {
+        ArrayList<Boolean> marked = new ArrayList<>();
         for (int i = 0; i < vertexList.size(); ++i)
-            visited.add(false);
-        return visited;
+            marked.add(false);
+        return marked;
     }
 
 

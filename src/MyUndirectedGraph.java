@@ -2,17 +2,17 @@ import java.util.*;
 
 public class MyUndirectedGraph implements A3Graph {
 
-    public int[] connectedComponents;
     public ArrayList<Node> vertexList = new ArrayList<>();
     public ArrayList<Node> helperList = new ArrayList<>();
     public List<Integer> eulerList = new ArrayList<>();
-
-    MyUndirectedGraph() {
-    }
+    public int[] connectedComponents;
 
     MyUndirectedGraph(int numberOfVertices) {
         for (int i = 0; i < numberOfVertices; i++)
             addVertex(i);
+    }
+
+    MyUndirectedGraph() {
     }
 
     @Override
@@ -48,9 +48,9 @@ public class MyUndirectedGraph implements A3Graph {
         int countConnComp = 1;
         for (int i = 0; i < vertexList.size(); i++)
             if (connectedComponents[i] == 0) {
-                ArrayList<Boolean> visited = runBFSUndirected(i);
+                ArrayList<Boolean> marked = runBFSUndirected(i);
                 for (int j = 0; j < vertexList.size(); j++)
-                    if (visited.get(j))
+                    if (marked.get(j))
                         connectedComponents[j] = countConnComp;
                 countConnComp++;
             }
@@ -60,91 +60,96 @@ public class MyUndirectedGraph implements A3Graph {
 
     @Override
     public boolean isAcyclic() {
-        ArrayList<Boolean> visited = new ArrayList<>();
+        ArrayList<Boolean> marked = new ArrayList<>();
         for (int i = 0; i < vertexList.size(); ++i)
-            visited.add(false);
+            marked.add(false);
         for (int u = 0; u < vertexList.size(); u++)
-            if (!visited.get(u))
-                if (isCyclic(u, visited, -1))
+            if (!marked.get(u))
+                if (checkIfHasCycle(u, marked, -1))
                     return false;
         return true;
     }
 
-    private boolean isCyclic(int startVertex, ArrayList<Boolean> visited, int parent) {
-        visited.set(startVertex, true);
-        Iterable<Integer> adjLst = new AdjacencyList(vertexList.get(startVertex).nodeLinkedList);
-        for (Integer i : adjLst) {
+    private boolean checkIfHasCycle(int startVertex, ArrayList<Boolean> marked, int parent) {
+        marked.set(startVertex, true);
+        Iterable<Integer> adjList = new AdjacencyList(vertexList.get(startVertex).nodeLinkedList);
+        for (Integer i : adjList) {
             for (Node node : vertexList)
                 if (node.value == i){
                     i = vertexList.indexOf(node);
                     break;
                 }
-            if (!visited.get(i)) {
-                if (isCyclic(i, visited, startVertex)) return true;
+            if (!marked.get(i)) {
+                if (checkIfHasCycle(i, marked, startVertex))
+                    return true;
             }
-            else if (i != parent)
-                return true;
+            else if (i == parent)
+                return false;
         }
         return false;
     }
 
     @Override
     public List<List<Integer>> connectedComponents() {
-        List<List<Integer>> result = new ArrayList<>();
+        List<List<Integer>> consequence = new ArrayList<>();
         List<Integer> subGraph = new ArrayList<>();
         connectedComponents = new int[vertexList.size()];
         int count = 1;
         for (int i = 0; i < vertexList.size(); i++)
             if (connectedComponents[i] == 0) {
-                ArrayList<Boolean> visited = runBFSUndirected(i);
+                ArrayList<Boolean> marked = runBFSUndirected(i);
                 for (int j = 0; j < vertexList.size(); j++)
-                    if (visited.get(j)) {
+                    if (marked.get(j)) {
                         subGraph.add(vertexList.get(j).value);
                         connectedComponents[j] = count;
                     }
                 List<Integer> f = new ArrayList<>();
                 for (Integer x : subGraph){
+                //for(Integer x = subGraph; x++)
                     f.add(x);
                     System.out.print(x + " ");
                 }
 
-//                f.addAll(subGraph);
-                result.add(f);
+                consequence.add(f);
                 System.out.println();
                 subGraph.clear();
                 count++;
             }
-        return result;
+        return consequence;
     }
 
     @Override
     public boolean hasEulerPath() {
-        int result = 1;
+        int consequence = 1;
         if (isConnected()) {
             int count = 0;
             for (int i = 0; i < vertexList.size(); i++)
                 if ((vertexList.get(i).nodeLinkedList.size() % 2) != 0)
                     count++;
-            if (count == 0) result = 2;
-            if (count == 2) result = 1;
-            else result = 0;
+            if (count == 2)
+                consequence = 1;
+            if (count == 0)
+                consequence = 2;
+            else
+                consequence = 0;
         }
-        return result == 1;
+
+        return consequence == 1;
     }
 
-    ArrayList<Boolean> visitArray() {
-        ArrayList<Boolean> visited = new ArrayList<>();
+    ArrayList<Boolean> marked() {
+        ArrayList<Boolean> marked = new ArrayList<>();
         for (int i = 0; i < vertexList.size(); ++i)
-            visited.add(false);
-        return visited;
+            marked.add(false);
+        return marked;
     }
 
     private ArrayList<Boolean> runBFSUndirected(int startVertex) {
-        ArrayList<Boolean> visited = new ArrayList<>();
+        ArrayList<Boolean> marked = new ArrayList<>();
         for (int i = 0; i < vertexList.size(); ++i)
-            visited.add(false);
-        BFSUndirected(visited, startVertex);
-        return visited;
+            marked.add(false);
+        BFSUndirected(marked, startVertex);
+        return marked;
     }
 
     private void BFSUndirected(ArrayList<Boolean> visited, int startVertex) {
@@ -213,22 +218,22 @@ public class MyUndirectedGraph implements A3Graph {
         if (helperList.get(u).nodeLinkedList.size() == 1)
             return true;
 
-        ArrayList<Boolean> visited = new ArrayList<>();
+        ArrayList<Boolean> marked = new ArrayList<>();
         ArrayList<Boolean> tempVisited = new ArrayList<>();
         for (int i = 0; i < vertexList.size(); i++) {
-            visited.add(false);
+            marked.add(false);
             tempVisited.add(false);
         }
 
-        int count1 = Undirected(u, visited);
+        int count1 = Undirected(u, marked);
         deleteEdge(u, v);
         int count2 = Undirected(u, tempVisited);
         addEdge(vertexList.get(u).value, vertexList.get(v).value);
         return count1 == count2;
     }
 
-    private int Undirected(int i, ArrayList<Boolean> visited) {
-        visited.set(i, true);
+    private int Undirected(int i, ArrayList<Boolean> marked) {
+        marked.set(i, true);
         int count = 1;
         Iterable<Integer> adjLst = new AdjacencyList(helperList.get(i).nodeLinkedList);
         for (Integer next : adjLst) {
@@ -237,8 +242,8 @@ public class MyUndirectedGraph implements A3Graph {
                     next = helperList.indexOf(node);
                     break;
                 }
-            if (!visited.get(next))
-                count += Undirected(next, visited);
+            if (!marked.get(next))
+                count += Undirected(next, marked);
         }
         return count;
     }
@@ -254,15 +259,21 @@ class Node {
     public LinkedList<Integer> nodeLinkedList = new LinkedList<>();
     public int value;
     public Node(int val) {
+
         value = val;
     }
 }
 
 class AdjacencyList implements Iterable<Integer> {
     private LinkedList<Integer> linkedList;
+
     public AdjacencyList(LinkedList<Integer> linkedList) {
+
         this.linkedList = linkedList;
     }
+
     @Override
-    public Iterator<Integer> iterator() { return linkedList.iterator(); }
+    public Iterator<Integer> iterator() {
+        return linkedList.iterator();
+    }
 }

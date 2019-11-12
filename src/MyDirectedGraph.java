@@ -60,17 +60,17 @@ public class MyDirectedGraph implements A3Graph {
     @Override
     public boolean isConnected() {
         Stack<Integer> stack = new Stack<>();
-        ArrayList<Boolean> visited = marked();
+        ArrayList<Boolean> marked = marked();
         for (int i = 0; i < vertexList.size(); i++)
-            if (!visited.get(i))
-                DFSDirected(visited, i, stack);
+            if (!marked.get(i))
+                DFSDirected(marked, i, stack);
         MyDirectedGraph graph = transpose();
-        visited = marked();
+        marked = marked();
         int count = 0;
         while (!stack.isEmpty()) {
             int v = stack.pop();
-            if (!visited.get(v)) {
-                graph.DFSDirected(visited, v, null);
+            if (!marked.get(v)) {
+                graph.DFSDirected(marked, v, null);
                 System.out.println();
                 count++;
             }
